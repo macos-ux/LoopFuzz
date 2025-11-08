@@ -7,10 +7,22 @@ use std::io::{self, BufRead, BufReader};
 struct Args {
     url:String,
     wordlist:String,
-    null:String,
+    null:u16,
 }
 
+fn banner(){
+    println!("
+
+@@@       @@@@@@   @@@@@@  @@@@@@@  @@@@@@@@ @@@  @@@ @@@@@@@@ @@@@@@@@ 
+@@!      @@!  @@@ @@!  @@@ @@!  @@@ @@!      @@!  @@@      @@!      @@! 
+@!!      @!@  !@! @!@  !@! @!@@!@!  @!!!:!   @!@  !@!    @!!      @!!   
+!!:      !!:  !!! !!:  !!! !!:      !!:      !!:  !!!  !!:      !!:     
+: ::.: :  : :. :   : :. :   :        :        :.:: :  :.::.: : :.::.: : 
+                                                                        
+        ");
+}
 fn main(){
+    banner();
     let args = Args::parse();
     let file = File::open(&args.wordlist).unwrap();
     let reader = BufReader::new(file);
@@ -19,7 +31,7 @@ fn main(){
             Ok(contenido) => {
                 let full = format!("{}{}", args.url, contenido);
                 let response = get(&full).unwrap();
-                if response.status() == 200{
+                if response.status() != args.null{
                     println!("{} - {}", contenido, response.status());
                 }
             },
